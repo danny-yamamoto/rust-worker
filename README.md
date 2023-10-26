@@ -49,3 +49,16 @@ Read more about this on the [`workers-rs`](https://github.com/cloudflare/workers
 ## Issues
 
 If you have any problems with the `worker` crate, please open an issue on the upstream project issue tracker on the [`workers-rs` repository](https://github.com/cloudflare/workers-rs).
+
+## D1
+### Create data
+```bash
+wrangler d1 execute test-db \
+  --local --command "CREATE TABLE IF NOT EXISTS users ( user_id INTEGER PRIMARY KEY, email_address TEXT, created_at INTEGER, deleted INTEGER, settings TEXT);"
+
+npx wrangler d1 execute test-db \
+  --local --command "INSERT INTO users (user_id, email_address, created_at, deleted, settings) VALUES (1, 'maria@example.com', 0, 0, '');"
+
+npx wrangler d1 execute test-db \
+  --local --command "select * from users;"
+```
