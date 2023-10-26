@@ -7,6 +7,7 @@
 		"dev": "wrangler dev --local"
 	},
 	"devDependencies": {
-		"wrangler": "^2.13.0"
+		"better-sqlite3": "^8.0.1",
+		"wrangler": "^2.20.1"
 	}
 }
