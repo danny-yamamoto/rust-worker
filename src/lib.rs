@@ -1,4 +1,3 @@
-
 use worker::*;
 use serde::{Deserialize, Serialize};
 
@@ -18,11 +17,10 @@ struct Users {
 
 #[event(fetch, respond_with_errors)]
 pub async fn main(request: Request, env: Env, ctx: Context) -> Result<Response> {
-    let d1 = env.d1("DB")?;
-    let statement = d1.prepare("SELECT * FROM users");
-    let result = statement.all().await?;
-    console_log!("result: {:?}", result.results::<Users>().unwrap());
-
-    //Response::empty()
-    Response::from_json(&result.results::<Users>().unwrap())
+    Router::new().get_async("/", |_, ctx| async move {
+        let d1 = ctx.env.d1("DB")?;
+        let statement = d1.prepare("select * from users");
+        let res = statement.all().await?;
+        Response::from_json(&res.results::<Users>().unwrap())
+    }).run(request, env).await
 }

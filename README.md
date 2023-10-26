@@ -32,10 +32,10 @@ With `wrangler`, you can build, test, and deploy your Worker with the following 
 
 ```sh
 # run your Worker in an ideal development workflow (with a local server, file watcher & more)
-$ npm run dev
+$ npx wrangler dev --local --persist
 
 # deploy your Worker globally to the Cloudflare network (update your wrangler.toml file for configuration)
-$ npm run deploy
+$ npx wrangler deploy
 ```
 
 Read the latest `worker` crate documentation here: https://docs.rs/worker
