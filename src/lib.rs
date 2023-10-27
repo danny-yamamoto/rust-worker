@@ -27,8 +27,24 @@ pub async fn main(request: Request, env: Env, ctx: Context) -> Result<Response> 
                 "default_id"
             }
         };
+        let d1 = ctx.env.d1("DB")?;
+        let statement = d1.prepare("select * from users where user_id = ?1");
+        let query = statement.bind(&[id.into()])?;
+        let res = query.first::<Users>(None).await;
         console_log!("id: {:?}", id);
-        Response::empty()
+        console_log!("res: {:?}", res);
+        match res {
+            Ok(Some(user)) => {
+                let json = serde_json::to_string(&user)
+                    .map_err(|e| Error::from(e.to_string()))?;
+                Response::ok(json)
+            },
+            Ok(None) => Response::error("Not Found", 404),
+            Err(e) => {
+                eprintln!("Database error: {:?}", e);
+                Response::error("Internal Server Error", 500)
+            },
+        }
     })
     .get_async("/", |_, ctx| async move {
         // To handle asynchronous HTTP GET requests
