@@ -17,7 +17,22 @@ struct Users {
 
 #[event(fetch, respond_with_errors)]
 pub async fn main(request: Request, env: Env, ctx: Context) -> Result<Response> {
-    Router::new().get_async("/", |_, ctx| async move {
+    // Route HTTP requests to appropriate handlers based on different URLs
+    Router::new()
+    .get_async("/:id", |_, ctx| async move {
+        let id = match ctx.param("id") {
+            Some(value) => value,
+            None => {
+                eprintln!("Error: id parameter not found");
+                "default_id"
+            }
+        };
+        console_log!("id: {:?}", id);
+        Response::empty()
+    })
+    .get_async("/", |_, ctx| async move {
+        // To handle asynchronous HTTP GET requests
+        // `|_, ctx|`` is a closure
         let d1 = ctx.env.d1("DB")?;
         let statement = d1.prepare("select * from users");
         let res = statement.all().await?;
