@@ -17,7 +17,6 @@ struct Users {
 
 #[event(fetch, respond_with_errors)]
 pub async fn main(request: Request, env: Env, ctx: Context) -> Result<Response> {
-    // Route HTTP requests to appropriate handlers based on different URLs
     Router::new()
     .get_async("/:id", |_, ctx| async move {
         let id = match ctx.param("id") {
@@ -31,8 +30,6 @@ pub async fn main(request: Request, env: Env, ctx: Context) -> Result<Response> 
         let statement = d1.prepare("select * from users where user_id = ?1");
         let query = statement.bind(&[id.into()])?;
         let res = query.first::<Users>(None).await;
-        console_log!("id: {:?}", id);
-        console_log!("res: {:?}", res);
         match res {
             Ok(Some(user)) => {
                 let json = serde_json::to_string(&user)
@@ -47,8 +44,6 @@ pub async fn main(request: Request, env: Env, ctx: Context) -> Result<Response> 
         }
     })
     .get_async("/", |_, ctx| async move {
-        // To handle asynchronous HTTP GET requests
-        // `|_, ctx|`` is a closure
         let d1 = ctx.env.d1("DB")?;
         let statement = d1.prepare("select * from users");
         let res = statement.all().await?;

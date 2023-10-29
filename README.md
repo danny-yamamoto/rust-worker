@@ -58,6 +58,8 @@ wrangler d1 execute test-db \
 
 npx wrangler d1 execute test-db \
   --local --command "INSERT INTO users (user_id, email_address, created_at, deleted, settings) VALUES (1, 'maria@example.com', 0, 0, '');"
+npx wrangler d1 execute test-db \
+  --local --command "INSERT INTO users (user_id, email_address, created_at, deleted, settings) VALUES (999, 'admin@example.com', 0, 0, '');"
 
 npx wrangler d1 execute test-db \
   --local --command "select * from users;"
